@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>老師 vs 學生｜排行榜</title>
+    <link rel="stylesheet" type="text/css" href="css/ui.css">
+</head>
+
+<body class="tvs-home">
+    <div class="tvs-home-card tvs-board-card">
+        <h1 class="tvs-home-title">🏆 排行榜</h1>
+
+        <div class="tvs-tabs">
+            <button id="tab_single" class="tvs-tab tvs-tab-active">單人模式</button>
+            <button id="tab_duo" class="tvs-tab">雙人模式</button>
+        </div>
+
+        <div id="board_single" class="tvs-board">
+            <p class="tvs-hint">載入中…</p>
+        </div>
+        <div id="board_duo" class="tvs-board" style="display: none;">
+            <p class="tvs-hint">載入中…</p>
+        </div>
+
+        <div class="tvs-menu">
+            <a class="tvs-btn tvs-btn-ghost" href="index.html">← 回首頁</a>
+        </div>
+    </div>
+
+    <script type="module" src="js/leaderboard.js"></script>
+</body>
+
+</html>

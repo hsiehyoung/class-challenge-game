@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>老師 vs 學生｜上課中</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+    <link rel="stylesheet" type="text/css" href="css/ui.css">
+</head>
+
+<body>
+    <div class="container-fluid background">
+        <img id="img_background" src="img/IMG_0271.png">
+        <img id="img_teacher" src="img/IMG_0154.png">
+        <img id="img_blackboard" src="img/IMG_0212.png">
+        <h4 id="attack_miss">MISS</h4>
+
+        <img id="img_attacked" src="img/123.png">
+        <img id="img_attacked2" src="img/123.png">
+        <img id="angry" src="img/Img_0925.png">
+        <img id="angry2" src="img/Img_0925.png">
+        <img id="img_disruptor1" src="img/S__234766353.png">
+        <img id="img_disruptor2" src="img/IMG_0250.png">
+        <img id="img_ufo_text" src="img/ufo_text.png">
+        <img id="img_stu" src="img/IMG_0188.png">
+
+        <img id="img_sleep" src="img/sleep.png">
+        <img id="clock" src="img/clock_back.png">
+        <img id="clock_min_hand" src="img/cornclock.png">
+        <img id="clock_hour_hand" src="img/popcornclock.png">
+        <h5 id="title">SCORE:</h5>
+        <h4 id="title_sleep_fast">深層睡眠</h4>
+        <div id="event_text"></div>
+        <img id="final" src="img/end_back.png">
+
+        <div id="final_text">
+            <div class="row">
+                <h1 id="end_stu">name</h1>
+                <h1 id="end_score">score</h1>
+                <h1 id="end_disruptor">disruptor</h1>
+            </div>
+            <img id="end_left" src="img/end_left.png">
+            <img id="end" src="img/end2.png">
+            <img id="end_right" src="img/end_right1.png">
+        </div>
+        <div id="start_background">
+            <div id="start_content">
+                <div class="row" id="row_name_label">
+                    <h5>你的名字</h5>
+                </div>
+                <div class="row my-2" id="row_name_input">
+                    <input id="name" type="text" class="form-control">
+                </div>
+                <div class="row" id="row_room" style="display: none;">
+                    <h2 id="room_code_text" class="tvs-room-code"></h2>
+                </div>
+                <div class="row" id="row_lobby_status" style="display: none;">
+                    <h6 id="lobby_status_text"></h6>
+                </div>
+                <div class="row">
+                    <button id="btn_start" disabled>start</button>
+                </div>
+            </div>
+            <div id="loading_content" style="display: none;">
+                <div class="d-flex justify-content-center">
+                    <div class="spinner-border text-secondary" role="status">
+                        <span class="sr-only"></span>
+                    </div>
+                </div>
+                <div class="row my-2" style="white-space: nowrap;">
+                    <h6 id="loading_text">...等待干擾同學連線...</h6>
+                </div>
+            </div>
+        </div>
+        <div id="chalk_event_part" style="display: none;">
+            <div style="background-color: rgba(255, 255, 255, 0.737);color: red;"
+                class="row mt-4 d-flex justify-content-center">
+                <h3 id="count_down_text">＊現在發生＊ 粉筆攻擊 請點選方向控制老師閃躲！！ 5</h3>
+
+            </div>
+            <div class="row">
+                <div class="col-2"></div>
+                <div class="col-3"><img id="dodge_left" style="cursor: pointer;" src="img/dodge_left.png"></div>
+                <div class="col-2"></div>
+                <div class="col-3"><img id="dodge_right" style="cursor: pointer;" src="img/dodge_right.png">
+                </div>
+            </div>
+        </div>
+        <img id="chalk1" src="img/chalk.png">
+        <img id="chalk2" src="img/chalk2.png">
+    </div>
+
+    <a id="btn_home" class="tvs-home-link" href="index.html">← 回首頁</a>
+    <div id="net_banner" class="tvs-net-banner" style="display: none;"></div>
+    <div id="ready_go" class="tvs-readygo" style="display: none;"><span>準 備</span></div>
+
+    <script src="js/vendor/socket.io.min.js"></script>
+    <script type="module" src="js/game.js"></script>
+</body>
+
+</html>

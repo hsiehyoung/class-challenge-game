@@ -1,0 +1,20 @@
+{
+  "name": "teacher-vs-student-remake",
+  "version": "1.0.0",
+  "description": "老師 vs 學生：課堂打瞌睡遊戲（重製版）",
+  "main": "server/index.js",
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "node --watch server/index.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.2",
+    "pg": "^8.13.1",
+    "socket.io": "^4.8.1"
+  }
+}

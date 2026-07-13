@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>老師 vs 學生｜干擾同學</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/disruptor.css">
+    <link rel="stylesheet" type="text/css" href="css/ui.css">
+</head>
+
+<body>
+    <div class="container-fluid background">
+        <div class="tvs-phone-wrap">
+            <div class="row" style="margin: 4vh;"></div>
+            <div class="row align-items-center">
+                <div class="col-12">
+                    <h4 style="color: white;">冷卻時間</h4>
+                </div>
+                <div class="col-12">
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-striped" role="progressbar" style="width: 0%"
+                            aria-valuenow="10" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row my-3 align-items-start">
+                <div class="col-6 tvs-action-col">
+                    <img id="right" src="img/1711.png" alt="丟粉筆">
+                    <h5 class="tvs-action-label">丟粉筆</h5>
+                </div>
+                <div class="col-6 tvs-action-col">
+                    <img id="left" src="img/1731.png" alt="看飛碟">
+                    <h5 class="tvs-action-label">看飛碟</h5>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- 大廳（加入房間 / 準備）覆蓋層 -->
+    <div id="lobby_overlay" class="tvs-overlay">
+        <div class="tvs-overlay-card">
+            <h2 id="lobby_room" class="tvs-room-code">房號：----</h2>
+            <p id="lobby_info">正在加入房間…</p>
+            <button id="btn_ready" class="tvs-btn" style="display: none;">準備</button>
+            <a class="tvs-btn tvs-btn-ghost" href="index.html">回首頁</a>
+        </div>
+    </div>
+
+    <!-- 結算覆蓋層 -->
+    <div id="result_overlay" class="tvs-overlay" style="display: none;">
+        <div class="tvs-overlay-card">
+            <h2 id="result_title">結果</h2>
+            <p id="result_detail"></p>
+            <a class="tvs-btn" href="index.html">回首頁</a>
+            <a class="tvs-btn tvs-btn-ghost" href="leaderboard.html">看排行榜</a>
+        </div>
+    </div>
+
+    <div id="net_banner" class="tvs-net-banner" style="display: none;"></div>
+    <div id="ready_go" class="tvs-readygo" style="display: none;"><span>準 備</span></div>
+
+    <script src="js/vendor/socket.io.min.js"></script>
+    <script type="module" src="js/disruptor.js"></script>
+</body>
+
+</html>
