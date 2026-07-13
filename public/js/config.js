@@ -6,4 +6,4 @@
 //   export const API_BASE = 'https://你的服務名稱.onrender.com';
 //
 // 前後端同源（本機 npm start、或直接用 Render 網址開遊戲）時，維持空字串即可。
-export const API_BASE = '';
+export const API_BASE = 'https://class-challenge-game.onrender.com';
