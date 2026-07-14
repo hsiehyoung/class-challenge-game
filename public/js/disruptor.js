@@ -138,6 +138,14 @@ $id('dir_cancel').addEventListener('click', () => {
 
 $id('left').addEventListener('click', () => sendAction('ufo')); // 看飛碟
 
+// ---- 操作教學 ----
+$id('btn_tutorial').addEventListener('click', () => {
+  $id('tutorial_overlay').style.display = '';
+});
+$id('tut_close').addEventListener('click', () => {
+  $id('tutorial_overlay').style.display = 'none';
+});
+
 // ---- 結果與斷線 ----
 socket.on('game:result', (res) => {
   playing = false;

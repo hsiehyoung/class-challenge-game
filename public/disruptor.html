@@ -46,7 +46,31 @@
             <h2 id="lobby_room" class="tvs-room-code">教室號碼：----</h2>
             <p id="lobby_info">正在加入房間…</p>
             <button id="btn_ready" class="tvs-btn" style="display: none;">準備</button>
+            <button id="btn_tutorial" class="tvs-btn tvs-btn-ghost" type="button">操作教學</button>
             <a class="tvs-btn tvs-btn-ghost" href="index.html">回首頁</a>
+        </div>
+    </div>
+
+    <!-- 操作教學（單頁說明卡） -->
+    <div id="tutorial_overlay" class="tvs-overlay tvs-overlay-front" style="display: none;">
+        <div class="tvs-overlay-card tvs-tut-card">
+            <p class="tvs-tut-text">你可以在課堂中透過干擾老師，讓你的同學不能好好睡覺！</p>
+            <div class="tvs-tut-row">
+                <img src="img/1711.png" class="tvs-tut-chalk" alt="丟粉筆">
+                <div>
+                    <h5>丟粉筆事件</h5>
+                    <p class="tvs-tut-text">有夠壞的你向講台丟擲粉筆，你可以選擇粉筆的丟擲方向！但老師身體很軟Q，閃掉他會繼續講課，不過丟中他可是會氣得跳腳！</p>
+                </div>
+            </div>
+            <div class="tvs-tut-row">
+                <img src="img/1731.png" class="tvs-tut-ufo" alt="看飛碟">
+                <div>
+                    <h5>飛碟事件</h5>
+                    <p class="tvs-tut-text">大喊“有飛碟”，對外星人很有研究的老師會跑去窗邊查看！如果他一時興起，會跟學生介紹外星人的故事喔！</p>
+                </div>
+            </div>
+            <p class="tvs-tut-note">要留意事件發動有 20 秒鐘的冷卻時間，看準時機干擾！</p>
+            <button id="tut_close" class="tvs-btn" type="button">關閉教學</button>
         </div>
     </div>
 

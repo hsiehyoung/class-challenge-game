@@ -424,6 +424,180 @@
     pointer-events: none;
 }
 
+/* ---- 操作教學 ---- */
+.tvs-overlay-front {
+    z-index: 700; /* 蓋在大廳 overlay（500）之上 */
+}
+
+/* 學生端開始面板：主按鈕（開始上課！/ 準備）與教學入口成對的膠囊樣式，
+   主按鈕綠底白字、教學按鈕白底綠框，同寬對齊（覆寫 main.css 的 #btn_start，原檔不動） */
+#btn_start {
+    width: auto;
+    min-width: 200px;
+    padding: 10px 32px;
+    border: 2px solid #4f7363;
+    border-radius: 999px;
+    background-color: #4f7363;
+    color: #fff;
+    font-size: 20px;
+    font-weight: bold;
+    font-family: 'Montserrat', "Microsoft JhengHei", sans-serif;
+    cursor: pointer;
+    transition: transform 0.1s, background-color 0.15s;
+}
+
+#btn_start:hover:not(:disabled) {
+    background-color: #3f5f50;
+    transform: scale(1.03);
+}
+
+#btn_start:disabled {
+    background-color: #9aa89e;
+    border-color: #9aa89e;
+    color: #f5f5f5;
+    cursor: not-allowed;
+}
+
+.tvs-tutorial-btn {
+    margin-top: 12px;
+    min-width: 200px;
+    padding: 7px 20px;
+    border: 2px solid #4f7363;
+    border-radius: 999px;
+    background-color: rgba(255, 255, 255, 0.85);
+    color: #4f7363;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    font-family: 'Montserrat', "Microsoft JhengHei", sans-serif;
+    z-index: 103;
+}
+
+.tvs-tutorial-btn:hover {
+    background-color: #4f7363;
+    color: #fff;
+}
+
+.tvs-tut-card {
+    width: min(620px, 94vw);
+    max-height: 88vh;
+    overflow-y: auto;
+}
+
+.tvs-tut-title {
+    margin: 0 0 10px;
+    font-weight: 900;
+    color: #2c3e2d;
+}
+
+/* 第一頁：圖左文右，間隔 15px */
+.tvs-tut-hrow {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    text-align: left;
+}
+
+.tvs-tut-hrow-text {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.tvs-tut-hero {
+    height: 150px;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+.tvs-tut-text {
+    margin: 0;
+    font-weight: bold;
+    color: #444;
+    line-height: 1.8;
+    text-align: left;
+}
+
+/* 學生端第二頁：左右兩欄以虛線分隔 */
+.tvs-tut-split {
+    display: flex;
+    gap: 14px;
+    margin: 4px 0;
+}
+
+.tvs-tut-col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+}
+
+.tvs-tut-col + .tvs-tut-col {
+    border-left: 2px dashed #cbbfae;
+    padding-left: 14px;
+}
+
+.tvs-tut-col img {
+    height: 96px;
+    object-fit: contain;
+    border-radius: 10px;
+}
+
+.tvs-tut-col h5 {
+    margin: 0;
+    font-weight: 900;
+    color: #2c3e2d;
+}
+
+.tvs-tut-col .tvs-tut-text {
+    font-size: 14px;
+}
+
+/* 干擾端：單頁上下排列，以虛線分隔各事件 */
+.tvs-tut-row {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    text-align: left;
+    border-top: 2px dashed #cbbfae;
+    padding-top: 12px;
+}
+
+.tvs-tut-row img {
+    height: 88px;
+    object-fit: contain;
+    border-radius: 10px;
+    flex-shrink: 0;
+}
+
+.tvs-tut-row h5 {
+    margin: 0 0 4px;
+    font-weight: 900;
+    color: #2c3e2d;
+}
+
+.tvs-tut-row .tvs-tut-text {
+    font-size: 14px;
+}
+
+.tvs-tut-note {
+    margin: 0;
+    font-weight: bold;
+    color: #b03a2e;
+}
+
+/* 1711/1731 為白色人物 + 透明背景，需補上干擾端按鈕同款底色才看得見 */
+.tvs-tut-chalk {
+    background-color: rgb(79, 115, 99);
+    padding: 6px;
+}
+
+.tvs-tut-ufo {
+    background-color: rgb(73, 105, 121);
+    padding: 6px;
+}
+
 /* ---- 開賽動畫：「準 備」→「開 始！」 ---- */
 .tvs-readygo {
     position: fixed;

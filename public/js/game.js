@@ -452,6 +452,20 @@ window.addEventListener('pointerup', () => { if (state.sleep) wakeUp(); });
 window.addEventListener('pointercancel', () => { if (state.sleep) wakeUp(); });
 stuImg.addEventListener('dragstart', (e) => e.preventDefault());
 
+// ---- 操作教學 ----
+$id('btn_tutorial').addEventListener('click', () => {
+  $id('tut_page1').style.display = '';
+  $id('tut_page2').style.display = 'none';
+  $id('tutorial_overlay').style.display = '';
+});
+$id('tut_next').addEventListener('click', () => {
+  $id('tut_page1').style.display = 'none';
+  $id('tut_page2').style.display = '';
+});
+$id('tut_close').addEventListener('click', () => {
+  $id('tutorial_overlay').style.display = 'none';
+});
+
 // ---- 進入點 ----
 if (mode === 'duo') initDuo();
 else initSingle();

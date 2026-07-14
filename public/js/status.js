@@ -1,4 +1,4 @@
-// 連線狀態燈：🔴 等待系統啟動（Render 冷啟動中）→ 🟢 系統正常運作
+// 連線狀態燈：🔴 等待系統啟動（Render 冷啟動中）→ 🟢 正常連線
 // 輪詢 /api/health（該請求本身就會喚醒 Render 與 Neon）。
 // 綠燈前由呼叫端透過 onReady/onDown 鎖定、解鎖操作。
 import { API_BASE } from './config.js';
@@ -10,7 +10,7 @@ const FETCH_TIMEOUT_MS = 5000;
 export function initStatusLight({ onReady, onDown } = {}) {
   const el = document.createElement('div');
   el.className = 'tvs-status';
-  el.innerHTML = '<span class="tvs-status-dot"></span><span class="tvs-status-text">等待系統啟動…</span>';
+  el.innerHTML = '<span class="tvs-status-dot"></span><span class="tvs-status-text">連線中</span>';
   document.body.appendChild(el);
   const textEl = el.querySelector('.tvs-status-text');
 
@@ -24,14 +24,14 @@ export function initStatusLight({ onReady, onDown } = {}) {
   }
 
   function setGreen() {
-    render(true, '系統正常運作');
+    render(true, '正常連線');
     if (!ready) {
       ready = true;
       if (onReady) onReady();
     }
   }
 
-  function setRed(text = '等待系統啟動…') {
+  function setRed(text = '連線中') {
     render(false, text);
     if (ready) {
       ready = false;
@@ -48,9 +48,9 @@ export function initStatusLight({ onReady, onDown } = {}) {
       clearTimeout(t);
       const data = await res.json();
       if (data && data.ok) setGreen();
-      else setRed('系統啟動中，請稍候…');
+      else setRed('連線中');
     } catch (err) {
-      setRed('系統啟動中，請稍候…');
+      setRed('連線中');
     }
     schedule();
   }
