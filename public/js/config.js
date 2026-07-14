@@ -1,9 +1,16 @@
 // ★ 部署設定 ★
 //
-// 前端與後端「不同網域」時（例如前端放 GitHub Pages、後端在 Render），
-// 請把 API_BASE 改成後端網址（結尾不要加斜線）：
-//
-//   export const API_BASE = 'https://你的服務名稱.onrender.com';
-//
-// 前後端同源（本機 npm start、或直接用 Render 網址開遊戲）時，維持空字串即可。
-export const API_BASE = 'https://class-challenge-game.onrender.com';
+// PROD_API：正式後端（Render）網址，結尾不要加斜線。
+// 本機開發（localhost 或區網 IP，例如手機連 http://192.168.x.x:3100）會自動
+// 改走「同源」後端（npm start 起的那台），不需要手動切換。
+const PROD_API = 'https://class-challenge-game.onrender.com';
+
+const host = window.location.hostname;
+const isLocal =
+  host === 'localhost' ||
+  host === '127.0.0.1' ||
+  /^192\.168\.\d{1,3}\.\d{1,3}$/.test(host) ||
+  /^10\.\d{1,3}\.\d{1,3}\.\d{1,3}$/.test(host) ||
+  /^172\.(1[6-9]|2\d|3[01])\.\d{1,3}\.\d{1,3}$/.test(host);
+
+export const API_BASE = isLocal ? '' : PROD_API;
