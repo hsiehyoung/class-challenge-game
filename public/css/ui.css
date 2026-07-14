@@ -290,6 +290,39 @@
     overflow-wrap: anywhere;
 }
 
+/* ---- 學生等候畫面的 QR 碼區塊 ---- */
+.tvs-qr-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    margin-top: 6px;
+    padding: 12px 16px;
+    border-radius: 12px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+}
+
+.tvs-qr-box #qr_code svg {
+    width: 140px;
+    height: 140px;
+    display: block;
+}
+
+.tvs-qr-hint {
+    margin: 0;
+    font-size: 13px;
+    font-weight: bold;
+    color: #555;
+    text-align: center;
+    line-height: 1.7;
+}
+
+.tvs-qr-hint b {
+    color: #2c5eaa;
+    word-break: break-all;
+}
+
 /* ---- 覆蓋層（干擾端大廳 / 結算）---- */
 .tvs-overlay {
     position: fixed;
@@ -427,6 +460,10 @@
 /* ---- 操作教學 ---- */
 .tvs-overlay-front {
     z-index: 700; /* 蓋在大廳 overlay（500）之上 */
+}
+
+#start_background {
+    border-width: 15vh 5vh;
 }
 
 /* 學生端開始面板：主按鈕（開始上課！/ 準備）與教學入口成對的膠囊樣式，

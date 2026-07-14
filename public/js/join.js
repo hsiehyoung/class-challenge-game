@@ -10,6 +10,13 @@ const nameInput = $id('player_name');
 const codeInput = $id('room_code');
 nameInput.value = sessionStorage.getItem('tvs_name') || '';
 
+// 掃學生畫面的 QR 碼進來會帶 ?code=教室號碼 → 直接預填，干擾者只需輸入姓名
+const urlCode = new URLSearchParams(window.location.search).get('code');
+if (urlCode) {
+  codeInput.value = urlCode.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 4);
+  nameInput.focus();
+}
+
 function refresh() {
   const ok = systemReady &&
     nameInput.value.trim() !== '' &&

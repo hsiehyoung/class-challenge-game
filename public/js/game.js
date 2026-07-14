@@ -163,7 +163,22 @@ function initSingle() {
 }
 
 // ---- 雙人模式：建房 / 大廳 / 開賽 ----
-function setLobbyUI({ waitingText, showReady, readyDisabled }) {
+// 等待干擾同學時顯示 QR 碼（掃描直達 join.html?code=教室號碼）
+function renderQr() {
+  if (!duo.roomCode) return;
+  const homeUrl = new URL('.', window.location.href).href;
+  $id('qr_hint').innerHTML =
+    `干擾同學請掃描 QR 碼加入遊戲，<br>或開啟 <b>${homeUrl}</b><br>輸入教室號碼加入`;
+  if (typeof window.qrcode !== 'function') return; // vendor 載入失敗時仍保留文字提示
+  const joinUrl = new URL('join.html', window.location.href);
+  joinUrl.searchParams.set('code', duo.roomCode);
+  const qr = window.qrcode(0, 'M');
+  qr.addData(joinUrl.href);
+  qr.make();
+  $id('qr_code').innerHTML = qr.createSvgTag({ cellSize: 4, margin: 0, scalable: true });
+}
+
+function setLobbyUI({ waitingText, showReady, readyDisabled, showQr }) {
   $id('start_content').style.display = '';
   $id('loading_content').style.display = 'none';
   $id('row_name_label').style.display = 'none';
@@ -172,6 +187,7 @@ function setLobbyUI({ waitingText, showReady, readyDisabled }) {
   $id('room_code_text').textContent = `教室號碼：${duo.roomCode}`;
   $id('row_lobby_status').style.display = '';
   $id('lobby_status_text').textContent = waitingText;
+  $id('row_qr').style.display = showQr ? '' : 'none';
   const btn = $id('btn_start');
   btn.textContent = '準備';
   btn.style.display = showReady ? '' : 'none';
@@ -201,7 +217,8 @@ function initDuo() {
         return;
       }
       duo.roomCode = res.roomCode;
-      setLobbyUI({ waitingText: '等待干擾同學加入…', showReady: false });
+      renderQr();
+      setLobbyUI({ waitingText: '等待干擾同學加入…', showReady: false, showQr: true });
     });
   });
 
@@ -213,7 +230,7 @@ function initDuo() {
     if (state.start || state.ended) return;
     duo.disruptorName = snap.disruptorName;
     if (!snap.disruptorName) {
-      setLobbyUI({ waitingText: '干擾同學離開了，等待新的干擾同學加入…', showReady: false });
+      setLobbyUI({ waitingText: '干擾同學離開了，等待新的干擾同學加入…', showReady: false, showQr: true });
       return;
     }
     if (snap.studentReady) {
