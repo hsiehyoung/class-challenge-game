@@ -72,7 +72,17 @@ app.post('/api/scores', async (req, res) => {
 });
 
 // ---- 靜態檔（本機開發與 Render 備用入口；正式前端在 GitHub Pages）----
-app.use(express.static(path.join(__dirname, '..', 'public')));
+// 圖檔/音檔/vendor 幾乎不變：給 30 天 immutable 快取，遊戲中換圖不會再打伺服器；
+// HTML/JS/CSS 則每次重新驗證（ETag 304），改版後玩家能立即拿到新檔。
+app.use(express.static(path.join(__dirname, '..', 'public'), {
+  setHeaders(res, filePath) {
+    if (/[\\/](img|audio|vendor)[\\/]/.test(filePath)) {
+      res.setHeader('Cache-Control', 'public, max-age=2592000, immutable');
+    } else {
+      res.setHeader('Cache-Control', 'no-cache');
+    }
+  },
+}));
 
 // ---- Socket.IO ----
 const server = http.createServer(app);

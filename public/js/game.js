@@ -40,6 +40,45 @@ const state = {
 const audio = new Audio('audio/bgm.mp3');
 audio.loop = true;
 
+// ---- 資源預載 ----
+// 這些圖不在 HTML markup 裡，是遊戲中換圖才用到；
+// 頁面載入完成後先全部暖起來，遊戲中換圖就不會再發出網路請求（也避免首次事件閃爍）。
+const RUNTIME_IMAGES = [
+  // 老師狀態機
+  'img/IMG_0149.png', 'img/IMG_0157.png', 'img/IMG_0158.png', 'img/IMG_0160.png',
+  'img/IMG_0163.png', 'img/IMG_0164.png', 'img/IMG_0165.png', 'img/IMG_0166.png',
+  'img/123.gif',
+  // 學生睡覺 / 深層睡眠
+  'img/IMG_0187.png', 'img/IMG_0189.png', 'img/sleep_fast.png',
+  // 粉筆事件（老師閃躲、干擾同學丟擲）
+  'img/S__234823688.png', 'img/S__234823693.png', 'img/S__234823696.png',
+  'img/S__234831875.png', 'img/S__234831880.png',
+  'img/S__234766351.png', 'img/S__234766352.png',
+  // 飛碟事件
+  'img/IMG_0248.png',
+  // 時鐘與背景彩蛋
+  'img/Clock_Alert.gif', 'img/IMG_0157.gif',
+  // 結算畫面
+  'img/end1.png', 'img/end3.png', 'img/end_right2.png',
+];
+const RUNTIME_AUDIO = ['audio/classstart.mp3', 'audio/afterclass.mp3', 'audio/sadsong.mp3'];
+const preloaded = []; // 保留引用，避免被回收後又重新請求
+
+window.addEventListener('load', () => {
+  // 等 markup 上的圖先載完再暖，不搶首屏頻寬
+  for (const src of RUNTIME_IMAGES) {
+    const img = new Image();
+    img.src = src;
+    preloaded.push(img);
+  }
+  for (const src of RUNTIME_AUDIO) {
+    const a = new Audio();
+    a.preload = 'auto';
+    a.src = src;
+    preloaded.push(a);
+  }
+});
+
 // 除錯用：可在 DevTools 觀察/調整遊戲狀態（例如 __tvs.deg = 350 快轉到下課前）
 window.__tvs = state;
 
@@ -382,8 +421,11 @@ setInterval(() => {
       }
       // 達到門檻後固定尺寸與位置，避免無限放大導致圖案被推出畫面外消失
       if (h >= 5289) {
-        bubble.src = 'img/sleep_fast.png';
-        $id('title_sleep_fast').style.display = 'block';
+        // 只在第一次進入深層睡眠時換圖，避免每 100ms 重複賦值觸發重新請求
+        if (!bubble.src.endsWith('sleep_fast.png')) {
+          bubble.src = 'img/sleep_fast.png';
+          $id('title_sleep_fast').style.display = 'block';
+        }
         state.score += 10;
       } else {
         state.score += 1;
