@@ -48,12 +48,12 @@ socket.on('connect', () => {
   }
   socket.emit('room:join', { name: myName, roomCode }, (res) => {
     if (!res || !res.ok) {
-      $id('lobby_room').textContent = `房號：${roomCode}`;
+      $id('lobby_room').textContent = `教室號碼：${roomCode}`;
       $id('lobby_info').textContent = `加入失敗：${(res && res.error) || '未知錯誤'}`;
       return;
     }
     joined = true;
-    $id('lobby_room').textContent = `房號：${res.roomCode}`;
+    $id('lobby_room').textContent = `教室號碼：${res.roomCode}`;
     $id('lobby_info').textContent = `學生「${res.studentName}」正在等你，請按下準備！`;
     $id('btn_ready').style.display = '';
   });

@@ -1,4 +1,4 @@
-// 干擾同學入口（手機友善）：姓名 + 房號 → disruptor.html
+// 干擾同學入口（手機友善）：姓名 + 教室號碼 → disruptor.html
 // 綠燈（後端喚醒）前鎖定加入按鈕。
 import { initStatusLight } from './status.js';
 

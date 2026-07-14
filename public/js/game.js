@@ -130,7 +130,7 @@ function setLobbyUI({ waitingText, showReady, readyDisabled }) {
   $id('row_name_label').style.display = 'none';
   $id('row_name_input').style.display = 'none';
   $id('row_room').style.display = '';
-  $id('room_code_text').textContent = `房號：${duo.roomCode}`;
+  $id('room_code_text').textContent = `教室號碼：${duo.roomCode}`;
   $id('row_lobby_status').style.display = '';
   $id('lobby_status_text').textContent = waitingText;
   const btn = $id('btn_start');

@@ -77,7 +77,7 @@ function init(io) {
       if (typeof cb !== 'function') return;
       const code = String((payload && payload.roomCode) || '').trim().toUpperCase();
       const room = rooms.get(code);
-      if (!room) return cb({ ok: false, error: '找不到這個房號' });
+      if (!room) return cb({ ok: false, error: '找不到這個教室號碼' });
       if (room.disruptor) return cb({ ok: false, error: '這間房已經有干擾同學了' });
       if (room.state !== 'waiting') return cb({ ok: false, error: '這場遊戲已經開始' });
 
