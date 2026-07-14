@@ -1,4 +1,4 @@
-// 老師 vs 學生（重製版）後端進入點
+// 嚴厲老師 vs 疲憊學生（重製版）後端進入點
 // Express：靜態檔 + REST API（health / 排行榜）
 // Socket.IO：雙人模式房間系統（見 rooms.js）
 require('dotenv').config();

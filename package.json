@@ -1,7 +1,7 @@
 {
   "name": "teacher-vs-student-remake",
   "version": "1.0.0",
-  "description": "老師 vs 學生：課堂打瞌睡遊戲（重製版）",
+  "description": "嚴厲老師 vs 疲憊學生：課堂打瞌睡遊戲（重製版）",
   "main": "server/index.js",
   "scripts": {
     "start": "node server/index.js",
