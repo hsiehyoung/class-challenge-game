@@ -114,6 +114,10 @@ function init(io) {
       }
       const type = payload && payload.type === 'ufo' ? 'ufo' : payload && payload.type === 'chalk' ? 'chalk' : null;
       if (!type) return cb({ ok: false, error: '未知的干擾類型', remainingMs: 0 });
+      // 粉筆丟擲方向由干擾者指定；缺漏或不合法時隨機補上
+      const dir = payload && payload.dir === 'left' ? 'left'
+        : payload && payload.dir === 'right' ? 'right'
+        : Math.random() < 0.5 ? 'left' : 'right';
 
       const now = Date.now();
       const elapsed = now - room.lastActionAt;
@@ -122,7 +126,7 @@ function init(io) {
       }
       room.lastActionAt = now;
       if (room.student) {
-        io.to(room.student.socketId).emit('event:trigger', { type, from: room.disruptor.name });
+        io.to(room.student.socketId).emit('event:trigger', { type, dir, from: room.disruptor.name });
       }
       cb({ ok: true, cooldownMs: COOLDOWN_MS });
     });

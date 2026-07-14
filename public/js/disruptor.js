@@ -62,6 +62,7 @@ socket.on('connect', () => {
 socket.on('disconnect', () => {
   light.setExternal(false, '連線中斷，重新連線中…');
   setButtonsEnabled(false);
+  $id('dir_overlay').style.display = 'none';
 });
 
 socket.on('room:update', (snap) => {
@@ -106,9 +107,9 @@ function startCooldown(totalMs) {
   }, 200);
 }
 
-function sendAction(type) {
+function sendAction(type, dir) {
   if (cooling || !playing) return;
-  socket.emit('disruptor:action', { type }, (res) => {
+  socket.emit('disruptor:action', { type, dir }, (res) => {
     if (res && res.ok) {
       startCooldown(res.cooldownMs);
     } else if (res && res.remainingMs > 0) {
@@ -118,14 +119,31 @@ function sendAction(type) {
   });
 }
 
-$id('right').addEventListener('click', () => sendAction('chalk')); // 丟粉筆
-$id('left').addEventListener('click', () => sendAction('ufo'));    // 看飛碟
+// 丟粉筆：先選擇丟擲方向（老師會隨機往左/右閃，猜中他閃的方向就砸中！）
+$id('right').addEventListener('click', () => {
+  if (cooling || !playing) return;
+  $id('dir_overlay').style.display = '';
+});
+$id('dir_left').addEventListener('click', () => {
+  $id('dir_overlay').style.display = 'none';
+  sendAction('chalk', 'left');
+});
+$id('dir_right').addEventListener('click', () => {
+  $id('dir_overlay').style.display = 'none';
+  sendAction('chalk', 'right');
+});
+$id('dir_cancel').addEventListener('click', () => {
+  $id('dir_overlay').style.display = 'none';
+});
+
+$id('left').addEventListener('click', () => sendAction('ufo')); // 看飛碟
 
 // ---- 結果與斷線 ----
 socket.on('game:result', (res) => {
   playing = false;
   setButtonsEnabled(false);
   clearInterval(cooldownTimer);
+  $id('dir_overlay').style.display = 'none';
   const win = res.winner === 'disruptor';
   $id('result_title').textContent = win ? '🎉 干擾成功，你贏了！' : '😪 干擾失敗，學生獲勝';
   $id('result_detail').textContent =

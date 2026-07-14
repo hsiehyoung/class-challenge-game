@@ -399,6 +399,29 @@
     pointer-events: none;
 }
 
+/* 丟粉筆方向選擇（干擾端覆蓋層內） */
+.tvs-dir-img {
+    width: 100%;
+    cursor: pointer;
+    border-radius: 12px;
+    transition: transform 0.1s;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    user-select: none;
+}
+
+.tvs-dir-img:active {
+    transform: scale(0.94);
+}
+
+.tvs-dir-label {
+    color: #444;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 4px;
+    pointer-events: none;
+}
+
 /* ---- 開賽動畫：「準 備」→「開 始！」 ---- */
 .tvs-readygo {
     position: fixed;

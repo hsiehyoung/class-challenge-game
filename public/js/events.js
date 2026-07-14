@@ -3,11 +3,9 @@
 // 時間軸與圖片切換完全沿用原版數值。
 const $id = (id) => document.getElementById(id);
 
-// 粉筆攻擊：玩家選擇閃躲方向後，粉筆隨機從左/右飛來。
-// 躲錯邊 → 老師被打中 → state.chalkAttack = true（憤怒攻擊 4 回合）。
-export function handleChalkEvent(dodge, state) {
-  const chalkDirection = ['left', 'right'];
-  const rand = Math.floor(Math.random() * 2);
+// 粉筆攻擊：干擾者指定丟擲方向（chalkDir），老師隨機閃躲（dodge，由呼叫端擲骰）。
+// 老師恰好閃進粉筆軌跡（dodge === chalkDir）→ 被打中 → state.chalkAttack = true（憤怒攻擊 4 回合）。
+export function handleChalkEvent(dodge, chalkDir, state) {
   state.dodgeCond = true;
 
   const teacher = $id('img_teacher');
@@ -22,7 +20,7 @@ export function handleChalkEvent(dodge, state) {
     setTimeout(() => { teacher.src = 'img/S__234831880.png'; }, 500);
   }
 
-  if (chalkDirection[rand] === 'left') {
+  if (chalkDir === 'left') {
     disruptor1.src = 'img/S__234766351.png';
     setTimeout(() => { disruptor1.src = 'img/S__234766352.png'; }, 100);
     setTimeout(() => {

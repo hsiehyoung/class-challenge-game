@@ -20,7 +20,9 @@ export function startSinglePlayerEvents(state, enqueue) {
       if (stopped) return;
       if (state.start && !state.dead && !state.timeUp) {
         const type = Math.random() < 0.5 ? 'chalk' : 'ufo';
-        enqueue({ type, from: '神秘同學' });
+        // 單人模式沒有干擾者，粉筆丟擲方向隨機
+        const dir = Math.random() < 0.5 ? 'left' : 'right';
+        enqueue({ type, dir, from: '神秘同學' });
       }
       scheduleNext();
     }, delay);

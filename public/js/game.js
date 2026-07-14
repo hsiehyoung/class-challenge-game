@@ -25,15 +25,11 @@ const state = {
   deg: 0,
   deg2: 0,
   backgroundMusic: true,
-  chalkEvent: false,
-  eventPause: false,
   chalkAttack: false,
   chalkAttackCount: 0,
   dodgeCond: false,
   ufoEvent: false,
   timeUp: false,
-  isChoose: 0,
-  chooseTime: 0,
   ended: false,
   disruptorEvents: [],
   disruptorsName: [],
@@ -209,7 +205,7 @@ function initDuo() {
 
   socket.on('event:trigger', (ev) => {
     if (!state.start || state.dead || state.timeUp) return;
-    enqueueEvent({ type: ev.type, from: ev.from });
+    enqueueEvent({ type: ev.type, dir: ev.dir, from: ev.from });
   });
 
   socket.on('game:result', (res) => {
@@ -257,22 +253,12 @@ function enqueueEvent(ev) {
     .join('');
 }
 
-function startChalkChoice() {
-  state.isChoose = 1;
-  state.chooseTime = 0;
-  state.chalkEvent = true;
-  state.eventPause = true;
-  $id('count_down_text').textContent = '＊現在發生＊ 粉筆攻擊 請點選方向控制老師閃躲！！ 5';
-  $id('chalk_event_part').style.display = 'block';
-}
-
-function dodge(direction) {
-  state.isChoose = 0;
-  state.chooseTime = 0;
-  state.chalkEvent = false;
-  state.eventPause = false;
-  $id('chalk_event_part').style.display = 'none';
-  handleChalkEvent(direction, state);
+// 粉筆攻擊：干擾者決定丟擲方向，老師隨機往左或往右閃；
+// 老師恰好閃進粉筆軌跡 → 被砸中 → 憤怒攻擊 4 回合（學生此時睡覺極易被抓）。
+// 學生端沒有任何操作，專心睡覺即可。
+function startChalkEvent(chalkDir) {
+  const teacherDodge = Math.random() < 0.5 ? 'left' : 'right';
+  handleChalkEvent(teacherDodge, chalkDir, state);
 }
 
 // ---- 遊戲結束 ----
@@ -353,12 +339,13 @@ setInterval(() => {
 setInterval(() => {
   if (
     !state.dead && state.start && !state.timeUp &&
-    !state.eventPause && !state.ufoEvent &&
+    !state.ufoEvent && !state.dodgeCond &&
     state.disruptorEvents.length > 0
   ) {
     const ev = state.disruptorEvents.shift();
-    if (ev.type === 'chalk') startChalkChoice();
-    else {
+    if (ev.type === 'chalk') {
+      startChalkEvent(ev.dir === 'right' ? 'right' : 'left');
+    } else {
       state.ufoEvent = true;
       handleUfoEvent(state);
     }
@@ -403,8 +390,6 @@ setInterval(() => {
       }
       $id('title').textContent = `Score: ${state.score}`;
     }
-
-    if (state.chalkEvent) state.chalkEvent = false;
   }
 }, 100);
 
@@ -420,7 +405,7 @@ setInterval(() => {
 
 // 每 330ms：時鐘（360 度 = 下課）
 setInterval(() => {
-  if (!state.dead && state.start && !state.timeUp && !state.eventPause) {
+  if (!state.dead && state.start && !state.timeUp) {
     if (state.deg === 360) {
       state.timeUp = true;
     } else {
@@ -441,22 +426,7 @@ setInterval(() => {
   }
 }, 330);
 
-// 每 1 秒：粉筆攻擊倒數（6 秒未選自動往左躲）
-setInterval(() => {
-  if (state.isChoose === 1) {
-    state.chooseTime += 1;
-    $id('count_down_text').textContent =
-      `＊現在發生＊ 粉筆攻擊 請點選方向控制老師閃躲！！   ${6 - state.chooseTime}`;
-    if (state.chooseTime >= 6) {
-      dodge('left');
-    }
-  }
-}, 1000);
-
 // ---- 操作事件 ----
-$id('dodge_left').addEventListener('click', () => dodge('left'));
-$id('dodge_right').addEventListener('click', () => dodge('right'));
-
 // 按住學生 = 睡覺；放開 = 醒來（pointer 事件同時支援滑鼠與觸控）
 const stuImg = $id('img_stu');
 stuImg.addEventListener('pointerdown', (e) => {
