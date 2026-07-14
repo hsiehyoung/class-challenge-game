@@ -37,7 +37,7 @@ const state = {
   playerName: '',
 };
 
-const audio = new Audio('audio/bgm.wav');
+const audio = new Audio('audio/bgm.mp3');
 audio.loop = true;
 
 // 除錯用：可在 DevTools 觀察/調整遊戲狀態（例如 __tvs.deg = 350 快轉到下課前）
@@ -90,7 +90,7 @@ function beginClassStart() {
   $id('start_background').style.display = 'none';
   audio.pause();
   state.backgroundMusic = false;
-  playOnce('audio/classstart.wav');
+  playOnce('audio/classstart.mp3');
   playReadyGo(7000);
   setTimeout(() => {
     state.backgroundMusic = true;
@@ -293,7 +293,7 @@ function finishGame(byDeath) {
     }
     $id('end').src = 'img/end2.png';
     $id('end_right').style.display = 'none';
-    playOnce('audio/sadsong.wav');
+    playOnce('audio/sadsong.mp3');
     // 原版：被抓後老師持續氣噗噗的小動畫
     setInterval(() => {
       const t = $id('img_teacher');
@@ -305,7 +305,7 @@ function finishGame(byDeath) {
     } else {
       setEndDisruptorText('乾擾同學～', false); // 原版文字
     }
-    playOnce('audio/afterclass.wav');
+    playOnce('audio/afterclass.mp3');
     if (state.score >= 1000) {
       $id('end').src = 'img/end3.png';
       $id('end_right').src = 'img/end_right1.png';
