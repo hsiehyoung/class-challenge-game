@@ -85,7 +85,8 @@ window.__tvs = state;
 let socket = null;
 let lightReady = false;
 let roomCreated = false;
-const duo = { roomCode: null, disruptorName: null, result: null };
+let lastByDeath = false; // 補送 game:over 用（斷線期間結束的場次）
+const duo = { roomCode: null, disruptorName: null, result: null, token: null };
 let singleEvents = null;
 const feed = [];
 
@@ -103,6 +104,10 @@ function showBanner(text) {
   const banner = $id('net_banner');
   banner.textContent = text;
   banner.style.display = 'block';
+}
+
+function hideBanner() {
+  $id('net_banner').style.display = 'none';
 }
 
 // ---- 連線狀態燈 ----
@@ -202,12 +207,23 @@ function initDuo() {
   $id('loading_text').textContent = '正在連線並建立房間…';
 
   socket = createSocket();
+  window.__tvsSocket = socket; // 除錯用
 
   socket.on('connect', () => {
     light.setExternal(true);
     if (roomCreated) {
-      // 斷線重連後原房間已失效
-      showBanner('連線曾中斷，原房間已失效，請回首頁重新開房');
+      // 意外斷線後重連：憑 token 在寬限期內回到原房間
+      socket.emit('room:rejoin', { roomCode: duo.roomCode, token: duo.token }, (res) => {
+        if (res && res.ok) {
+          hideBanner();
+          // 斷線期間本地已下課但結果沒送出 → 補送，讓勝負與排行榜不漏
+          if (state.ended && !duo.result) {
+            socket.emit('game:over', { score: state.score, dead: lastByDeath });
+          }
+        } else {
+          showBanner('連線曾中斷，原房間已失效，請回首頁重新開房');
+        }
+      });
       return;
     }
     roomCreated = true;
@@ -217,6 +233,7 @@ function initDuo() {
         return;
       }
       duo.roomCode = res.roomCode;
+      duo.token = res.token;
       renderQr();
       setLobbyUI({ waitingText: '等待干擾同學加入…', showReady: false, showQr: true });
     });
@@ -224,6 +241,21 @@ function initDuo() {
 
   socket.on('disconnect', () => {
     light.setExternal(false, '連線中斷，重新連線中…');
+  });
+
+  // 對方連線狀態（意外斷線 → 寬限期等待重連）
+  socket.on('peer:connection', (info) => {
+    if (info.role !== 'disruptor' || state.ended) return;
+    if (info.connected) hideBanner();
+    else showBanner('干擾同學連線不穩，等待重連…');
+  });
+
+  // 主動離開（關閉/返回首頁）：立即通知伺服器，對方能馬上收到
+  window.addEventListener('pagehide', () => {
+    if (socket && socket.connected) {
+      socket.emit('room:leave');
+      socket.disconnect();
+    }
   });
 
   socket.on('room:update', (snap) => {
@@ -331,6 +363,7 @@ function reportResult(byDeath) {
 function finishGame(byDeath) {
   if (state.ended) return;
   state.ended = true;
+  lastByDeath = byDeath;
   state.start = false;
   if (singleEvents) singleEvents.stop();
   audio.pause();

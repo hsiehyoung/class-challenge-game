@@ -88,6 +88,10 @@ app.use(express.static(path.join(__dirname, '..', 'public'), {
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: { origin: allowedOrigins },
+  // 預設 25s/20s 要將近 45 秒才能發現對方無聲斷線；
+  // 縮短為 5s/4s，約 9 秒內就能偵測（流量僅每 5 秒一個極小的 ping）
+  pingInterval: 5000,
+  pingTimeout: 4000,
 });
 rooms.init(io);
 

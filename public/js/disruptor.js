@@ -19,14 +19,20 @@ let joined = false;
 let playing = false;
 let cooling = false;
 let cooldownTimer = null;
+let myToken = null; // 意外斷線後重連回房的憑證
 
 const light = initStatusLight({});
 const socket = createSocket();
+window.__tvsSocket = socket; // 除錯用
 
 function showBanner(text) {
   const banner = $id('net_banner');
   banner.textContent = text;
   banner.style.display = 'block';
+}
+
+function hideBanner() {
+  $id('net_banner').style.display = 'none';
 }
 
 function setButtonsEnabled(enabled) {
@@ -42,8 +48,27 @@ setButtonsEnabled(false);
 socket.on('connect', () => {
   light.setExternal(true);
   if (joined) {
-    showBanner('連線曾中斷，房間已失效，請回首頁重新加入');
-    setButtonsEnabled(false);
+    // 意外斷線後重連：憑 token 在寬限期內回到原房間（含冷卻剩餘時間同步）
+    socket.emit('room:rejoin', { roomCode, token: myToken }, (res) => {
+      if (res && res.ok) {
+        hideBanner();
+        if (res.state === 'playing') {
+          playing = true;
+          $id('lobby_overlay').style.display = 'none';
+          if (res.cooldownRemainingMs > 0) {
+            startCooldown(res.cooldownRemainingMs);
+          } else if (!cooling) {
+            setButtonsEnabled(true);
+          }
+        } else if (res.disruptorReady) {
+          $id('btn_ready').disabled = true;
+          $id('lobby_info').textContent = '已準備，等待學生準備…';
+        }
+      } else {
+        showBanner('連線曾中斷，房間已失效，請回首頁重新加入');
+        setButtonsEnabled(false);
+      }
+    });
     return;
   }
   socket.emit('room:join', { name: myName, roomCode }, (res) => {
@@ -53,10 +78,31 @@ socket.on('connect', () => {
       return;
     }
     joined = true;
+    myToken = res.token;
     $id('lobby_room').textContent = `教室號碼：${res.roomCode}`;
     $id('lobby_info').textContent = `學生「${res.studentName}」正在等你，請按下準備！`;
     $id('btn_ready').style.display = '';
   });
+});
+
+// 對方連線狀態（意外斷線 → 寬限期等待重連）
+socket.on('peer:connection', (info) => {
+  if (info.role !== 'student') return;
+  if (info.connected) {
+    hideBanner();
+    if (playing && !cooling) setButtonsEnabled(true);
+  } else {
+    showBanner('學生連線不穩，等待重連…');
+    if (playing) setButtonsEnabled(false);
+  }
+});
+
+// 主動離開（關閉頁面/回首頁）：立即通知伺服器
+window.addEventListener('pagehide', () => {
+  if (socket && socket.connected) {
+    socket.emit('room:leave');
+    socket.disconnect();
+  }
 });
 
 socket.on('disconnect', () => {
